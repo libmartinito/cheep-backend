@@ -25,4 +25,7 @@ Route.group(() => {
     Route.post('register', 'AuthController.register')
     Route.post('login', 'AuthController.login')
   }).prefix('auth')
+  Route.group(() => {
+    Route.resource('cheep', 'CheepsController').apiOnly()
+  }).middleware('auth:api')
 }).prefix('api')
