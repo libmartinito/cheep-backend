@@ -27,5 +27,5 @@ Route.group(() => {
   }).prefix('auth')
   Route.group(() => {
     Route.resource('cheep', 'CheepsController').apiOnly()
-  }).middleware('auth:api')
+  })
 }).prefix('api')

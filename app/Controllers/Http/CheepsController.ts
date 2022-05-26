@@ -2,9 +2,9 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Cheep from 'App/Models/Cheep'
 
 export default class CheepsController {
-    public async index({ auth }: HttpContextContract) {
-        const user = await auth.authenticate()
-        const cheeps = await Cheep.query().where('user_id', user.id)
+    public async index({ }: HttpContextContract) {
+        // const user = await auth.authenticate()
+        const cheeps = await Cheep.query()
         return cheeps
     }
 
