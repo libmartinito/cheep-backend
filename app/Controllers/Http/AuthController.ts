@@ -7,11 +7,15 @@ export default class AuthController {
         const tokenInfo = await auth.use('api').attempt(email, password, {
             expiresIn: '7 days',
         })
-        const userId = await User.query().select('id').where('email', email)
+        const user = await User.query().where('email', email)
         const userInfo = {
-            user_id: userId[0].id,
+            user_id: user[0].id,
             token: tokenInfo.token,
-            expires_at: tokenInfo.expiresAt
+            expires_at: tokenInfo.expiresAt,
+            username: user[0].username,
+            handle: user[0].handle,
+            icon: user[0].icon,
+            bio: user[0].bio
         }
         console.log(userInfo)
         return userInfo
@@ -27,9 +31,18 @@ export default class AuthController {
         user.icon = "https://avatars.dicebear.com/api/croodles/" + user.handle + ".svg"
         user.bio = bio
         await user.save()
-        const token = await auth.use('api').login(user, {
+        const tokenInfo = await auth.use('api').login(user, {
             expiresIn: '7 days',
         })
-        return token.toJSON()
+        const userInfo = {
+            user_id: user.id,
+            token: tokenInfo.token,
+            expires_at: tokenInfo.expiresAt,
+            username: user.username,
+            handle: user.handle,
+            icon: user.icon,
+            bio: user.bio
+        }
+        return userInfo
     }
 }

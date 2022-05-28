@@ -27,5 +27,10 @@ Route.group(() => {
   }).prefix('auth')
   Route.group(() => {
     Route.resource('cheep', 'CheepsController').apiOnly()
-  })
+    Route.get('cheep/all/:id', 'CheepsController.showAllForUser')
+    Route.post('like', 'LikesController.store')
+    Route.delete('like/:id', 'LikesController.destroy')
+    Route.get('like', 'LikesController.showAllForUser')
+    Route.get('like/:cheepid', 'LikesController.getLikeCount')
+  }).middleware("auth:api")
 }).prefix('api')
