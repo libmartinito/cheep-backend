@@ -20,7 +20,7 @@ export default class LikesController {
         const userLikes = await Like.query().where('user_id', user.id)
         return userLikes
     }
-    public async getLikeCount({ params }: HttpContextContract) {
+    public async getCount({ params }: HttpContextContract) {
         const count = await Database
             .from('likes')
             .where('cheep_id', params.cheepid)
