@@ -21,7 +21,12 @@ export default class CheepsController {
     }
 
     public async show({ params }: HttpContextContract) {
-        const cheep = await Cheep.find(params.id)
+        // const cheep = await Cheep.find(params.id)
+        const cheep = await Database
+            .from('cheeps')
+            .join('users', 'user_id', '=', 'users.id')
+            .select('cheeps.id', 'user_id', 'content', 'username', 'handle', 'icon', 'cheeps.created_at')
+            .where('cheeps.id', params.id)
         return cheep
     }
 
