@@ -10,10 +10,7 @@ export default class Connection extends BaseModel {
   public userId: number
 
   @column()
-  public followingId: string
-
-  @column()
-  public followerId: string
+  public isfollowingId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

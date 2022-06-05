@@ -7,8 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
-      table.string('following_id', 255).nullable()
-      table.string('follower_id', 255).nullable()
+      table.integer('isfollowing_id')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

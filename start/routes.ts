@@ -33,7 +33,6 @@ Route.group(() => {
     Route.get('cheep/all/:id', 'CheepsController.indexForUser')
     Route.get('cheep/:id', 'CheepsController.show')
     Route.delete('cheep/:id', 'CheepsController.destroy')
-    
     // Routes for dealing with cheep likes
     Route.post('like', 'LikesController.store')
     Route.delete('like/:id', 'LikesController.destroy')
@@ -56,5 +55,9 @@ Route.group(() => {
     // Routes for dealing with users
     Route.get('user/:handle', 'UsersController.getUserInfoFromHandle')
     Route.get('user', 'UsersController.index')
+    // Routes for dealing with connections
+    Route.get('connection', 'ConnectionsController.index')
+    Route.post('connection', 'ConnectionsController.store')
+    Route.delete('connection/:id', 'ConnectionsController.destroy')
   }).middleware("auth:api")
 }).prefix('api')
