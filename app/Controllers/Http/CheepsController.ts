@@ -3,25 +3,37 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import Cheep from 'App/Models/Cheep'
 
 export default class CheepsController {
+
+    public static table = 'cheeps'
+    
     public async index({}: HttpContextContract) {
         const cheeps = await Database
             .from('cheeps')
             .join('users', 'user_id', '=', 'users.id')
-            .select('cheeps.id','user_id','content', 'username', 'handle', 'icon', 'cheeps.created_at')
+            .select('cheeps.id', 'user_id', 'content', 'username', 'handle', 'icon', 'cheeps.created_at')
             .orderBy('created_at', 'desc')
         return cheeps
     }
 
-    public async store({ auth, request }: HttpContextContract) {
-        const user = await auth.authenticate()
+    public async store({ request }: HttpContextContract) {
         const cheep = new Cheep()
+        cheep.userId = request.input('user_id')
         cheep.content = request.input('content')
-        await user.related('cheeps').save(cheep)
+        await cheep.save()
         return cheep
     }
 
+    public async indexForUser({ params }: HttpContextContract) {
+        const cheepsForUser = await Database
+            .from('cheeps')
+            .join('users', 'user_id', '=', 'users.id')
+            .select('cheeps.id', 'user_id', 'content', 'username', 'handle', 'icon', 'cheeps.created_at')
+            .where('user_id', params.id)
+            .orderBy('created_at', 'desc')
+        return cheepsForUser
+    }
+
     public async show({ params }: HttpContextContract) {
-        // const cheep = await Cheep.find(params.id)
         const cheep = await Database
             .from('cheeps')
             .join('users', 'user_id', '=', 'users.id')
@@ -30,26 +42,7 @@ export default class CheepsController {
         return cheep
     }
 
-    public async showAllForUser({ params }: HttpContextContract) {
-        const allCheeps = await Cheep.query().where('user_id', params.id).orderBy('created_at', 'desc')
-        return allCheeps
-    }
-
-    public async update({ request, params }: HttpContextContract) {
-        const cheep = await Cheep.find(params.id)
-        if (cheep) {
-            cheep.content = request.input('content')
-            if (await cheep.save()) {
-                return cheep
-            }
-            return
-        }
-        return
-    }
-
-    public async destroy({ response, auth, params }: HttpContextContract) {
-        const user = await auth.authenticate()
-        await Cheep.query().where('user_id', user.id).where('id', params.id).delete()
-        return
+    public async destroy({ params }: HttpContextContract) {
+        await Cheep.query().where('id', params.id).delete()
     }
 }

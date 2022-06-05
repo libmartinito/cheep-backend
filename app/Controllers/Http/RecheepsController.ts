@@ -3,23 +3,28 @@ import Recheep from 'App/Models/Recheep'
 import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class RecheepsController {
-    public async store({ auth, request}: HttpContextContract) {
-        const user = await auth.authenticate()
+    public async store({ request }: HttpContextContract) {
         const recheep = new Recheep()
         recheep.userId = request.input('userid')
         recheep.cheepId = request.input('cheepid')
-        await user.related('recheeps').save(recheep)
+        await recheep.save()
         return recheep
     }
-    public async destroy({ auth, params }: HttpContextContract) {
-        const user = await auth.authenticate()
-        await Recheep.query().where('user_id', user.id).where('id', params.id).delete()
+
+    public async destroy({ params }: HttpContextContract) {
+        await Recheep.query().where('id', params.id).delete()
     }
-    public async showAllForUser({ auth }: HttpContextContract) {
-        const user = await auth.authenticate()
-        const userRecheeps = await Recheep.query().where('user_id', user.id)
+
+    public async index ({}: HttpContextContract) {
+        const recheeps = await Recheep.query()
+        return recheeps
+    }
+
+    public async indexForUser({ params }: HttpContextContract) {
+        const userRecheeps = await Recheep.query().where('user_id', params.id)
         return userRecheeps
     }
+
     public async getCount({ params }: HttpContextContract) {
         const count = await Database
             .from('recheeps')

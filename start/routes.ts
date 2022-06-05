@@ -28,22 +28,32 @@ Route.group(() => {
   }).prefix('auth')
   Route.group(() => {
     // Routes for dealing with cheeps
-    Route.resource('cheep', 'CheepsController').apiOnly()
-    Route.get('cheep/all/:id', 'CheepsController.showAllForUser')
+    Route.get('cheep/all', 'CheepsController.index')
+    Route.post('cheep', 'CheepsController.store')
+    Route.get('cheep/all/:id', 'CheepsController.indexForUser')
+    Route.get('cheep/:id', 'CheepsController.show')
+    Route.delete('cheep/:id', 'CheepsController.destroy')
+    
     // Routes for dealing with cheep likes
     Route.post('like', 'LikesController.store')
     Route.delete('like/:id', 'LikesController.destroy')
-    Route.get('like', 'LikesController.showAllForUser')
-    Route.get('like/:cheepid', 'LikesController.getCount')
+    Route.get('like/all', 'LikesController.index')
+    Route.get('like/all/:id', 'LikesController.indexForUser')
+    Route.get('like/count/:cheepid', 'LikesController.getCount')
     // Routes for dealing with cheep recheeps
     Route.post('recheep', 'RecheepsController.store')
     Route.delete('recheep/:id', 'RecheepsController.destroy')
-    Route.get('recheep', 'RecheepsController.showAllForUser')
-    Route.get('recheep/:cheepid', 'RecheepsController.getCount')
+    Route.get('recheep/all', 'RecheepsController.index')
+    Route.get('recheep/all/:id', 'RecheepsController.indexForUser')
+    Route.get('recheep/count/:cheepid', 'RecheepsController.getCount')
     // Routes for dealing with cheep replies
     Route.post('reply', 'RepliesController.store')
-    Route.delete('reply/:cheepid', 'RepliesController.store')
-    Route.get('reply', 'RepliesController.showAllForUser')
-    Route.get('reply/:cheepid', 'RepliesController.getCount')
+    Route.delete('reply/:cheepid', 'RepliesController.destroy')
+    Route.get('reply/all', 'RepliesController.index')
+    Route.get('reply/all/:id', 'RepliesController.indexForUser')
+    Route.get('reply/count/:cheepid', 'RepliesController.getCount')
+    Route.get('reply/all/cheep/:parentid', 'RepliesController.indexForPost')
+    // Routes for dealing with users
+    Route.get('user/:handle', 'UsersController.getUserInfoFromHandle')
   }).middleware("auth:api")
 }).prefix('api')
