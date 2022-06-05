@@ -55,5 +55,6 @@ Route.group(() => {
     Route.get('reply/all/cheep/:parentid', 'RepliesController.indexForPost')
     // Routes for dealing with users
     Route.get('user/:handle', 'UsersController.getUserInfoFromHandle')
+    Route.get('user', 'UsersController.index')
   }).middleware("auth:api")
 }).prefix('api')
